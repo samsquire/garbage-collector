@@ -53,6 +53,7 @@ morecore(size_t num_units)
 {
     void *vp;
     header_t *up;
+    printf("Asking for more memory\n");
 
     if (num_units > MIN_ALLOC_SIZE)
         num_units = MIN_ALLOC_SIZE / sizeof(header_t);
@@ -77,6 +78,7 @@ GC_malloc(size_t alloc_size)
     header_t *p, *prevp;
 
     num_units = (alloc_size + sizeof(header_t) - 1) / sizeof(header_t) + 1;  
+    printf("Using a block of %d size\n", num_units);
     prevp = freep;
 
     for (p = prevp->next;; prevp = p, p = p->next) {
@@ -228,8 +230,8 @@ GC_collect(void)
             /*
              * The chunk hasn't been marked. Thus, it must be set free. 
              */
-            printf("Freeing chunk of memory at %p size %d", tp, tp->size);
             tp = p;
+            printf("Freeing chunk of memory at %p size %d", tp, tp->size);
             p = UNTAG(p->next);
             add_to_free_list(tp);
 
@@ -253,7 +255,9 @@ int main() {
     int * pointer = GC_malloc(sizeof(int));
     *pointer = 6;
     printf("%p\n", pointer);
+    printf("First collection\n");
     GC_collect();
+    printf("Second collection\n");
     pointer = NULL; 
     GC_collect();
     return 0;
