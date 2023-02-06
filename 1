@@ -1,0 +1,150 @@
+garbage-collector.c: In function ‘GC_malloc’:
+garbage-collector.c:81:31: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘size_t’ {aka ‘long unsigned int’} [-Wformat=]
+   81 |     printf("Using a block of %d size\n", num_units);
+      |                              ~^          ~~~~~~~~~
+      |                               |          |
+      |                               int        size_t {aka long unsigned int}
+      |                              %ld
+garbage-collector.c: In function ‘scan_region’:
+garbage-collector.c:130:24: warning: comparison between pointer and integer
+  130 |             if (bp + 1 <= v &&
+      |                        ^~
+garbage-collector.c:131:35: warning: comparison between pointer and integer
+  131 |                 bp + 1 + bp->size > v) {
+      |                                   ^
+garbage-collector.c:133:30: warning: assignment to ‘struct header *’ from ‘long unsigned int’ makes pointer from integer without a cast [-Wint-conversion]
+  133 |                     bp->next = ((unsigned long) bp->next) | 1;
+      |                              ^
+garbage-collector.c:134:28: warning: too many arguments for format [-Wformat-extra-args]
+  134 |                     printf("Marking bp->next as used\n", bp->next);
+      |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+garbage-collector.c:137:22: warning: assignment to ‘header_t *’ {aka ‘struct header *’} from ‘long unsigned int’ makes pointer from integer without a cast [-Wint-conversion]
+  137 |         } while ((bp = UNTAG(bp->next)) != usedp);
+      |                      ^
+garbage-collector.c: In function ‘scan_register’:
+garbage-collector.c:158:21: warning: format ‘%p’ expects argument of type ‘void *’, but argument 3 has type ‘long unsigned int’ [-Wformat=]
+  158 |         printf("%p %p %p", bp, UNTAG(usedp->next), usedp);
+      |                    ~^
+      |                     |
+      |                     void *
+      |                    %ld
+garbage-collector.c:159:17: warning: assignment to ‘header_t *’ {aka ‘struct header *’} from ‘long unsigned int’ makes pointer from integer without a cast [-Wint-conversion]
+  159 |         for (bp = UNTAG(usedp->next); bp != usedp; bp = UNTAG(bp->next)) {
+      |                 ^
+garbage-collector.c:159:55: warning: assignment to ‘header_t *’ {aka ‘struct header *’} from ‘long unsigned int’ makes pointer from integer without a cast [-Wint-conversion]
+  159 |         for (bp = UNTAG(usedp->next); bp != usedp; bp = UNTAG(bp->next)) {
+      |                                                       ^
+garbage-collector.c:166:22: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘long unsigned int’ [-Wformat=]
+  166 |             printf("%d register data\n", register_data);
+      |                     ~^                   ~~~~~~~~~~~~~
+      |                      |                   |
+      |                      int                 long unsigned int
+      |                     %ld
+garbage-collector.c:169:21: warning: comparison of distinct pointer types lacks a cast
+  169 |                  vp < (bp + bp->size + 1);
+      |                     ^
+garbage-collector.c:172:20: warning: assignment to ‘header_t *’ {aka ‘struct header *’} from ‘long unsigned int’ makes pointer from integer without a cast [-Wint-conversion]
+  172 |                 up = UNTAG(bp->next);
+      |                    ^
+garbage-collector.c:175:32: warning: comparison between pointer and integer
+  175 |                         up + 1 <= register_data &&
+      |                                ^~
+garbage-collector.c:176:43: warning: comparison between pointer and integer
+  176 |                         up + 1 + up->size > register_data) {
+      |                                           ^
+garbage-collector.c:178:34: warning: assignment to ‘struct header *’ from ‘long unsigned int’ makes pointer from integer without a cast [-Wint-conversion]
+  178 |                         up->next = ((unsigned long) up->next) | 1;
+      |                                  ^
+garbage-collector.c:181:30: warning: assignment to ‘header_t *’ {aka ‘struct header *’} from ‘long unsigned int’ makes pointer from integer without a cast [-Wint-conversion]
+  181 |                 } while ((up = UNTAG(up->next)) != bp);
+      |                              ^
+garbage-collector.c: In function ‘scan_heap’:
+garbage-collector.c:198:13: warning: assignment to ‘header_t *’ {aka ‘struct header *’} from ‘long unsigned int’ makes pointer from integer without a cast [-Wint-conversion]
+  198 |     for (bp = UNTAG(usedp->next); bp != usedp; bp = UNTAG(bp->next)) {
+      |             ^
+garbage-collector.c:198:51: warning: assignment to ‘header_t *’ {aka ‘struct header *’} from ‘long unsigned int’ makes pointer from integer without a cast [-Wint-conversion]
+  198 |     for (bp = UNTAG(usedp->next); bp != usedp; bp = UNTAG(bp->next)) {
+      |                                                   ^
+garbage-collector.c:203:17: warning: comparison of distinct pointer types lacks a cast
+  203 |              vp < (bp + bp->size + 1);
+      |                 ^
+garbage-collector.c:206:16: warning: assignment to ‘header_t *’ {aka ‘struct header *’} from ‘long unsigned int’ makes pointer from integer without a cast [-Wint-conversion]
+  206 |             up = UNTAG(bp->next);
+      |                ^
+garbage-collector.c:209:28: warning: comparison between pointer and integer
+  209 |                     up + 1 <= v &&
+      |                            ^~
+garbage-collector.c:210:39: warning: comparison between pointer and integer
+  210 |                     up + 1 + up->size > v) {
+      |                                       ^
+garbage-collector.c:211:30: warning: assignment to ‘struct header *’ from ‘long unsigned int’ makes pointer from integer without a cast [-Wint-conversion]
+  211 |                     up->next = ((unsigned long) up->next) | 1;
+      |                              ^
+garbage-collector.c:214:26: warning: assignment to ‘header_t *’ {aka ‘struct header *’} from ‘long unsigned int’ makes pointer from integer without a cast [-Wint-conversion]
+  214 |             } while ((up = UNTAG(up->next)) != bp);
+      |                          ^
+garbage-collector.c: In function ‘GC_init’:
+garbage-collector.c:238:12: warning: use of assignment suppression and length modifier together in gnu_scanf format [-Wformat=]
+  238 |            "%*d %*s %*c %*d %*d %*d %*d %*d %*u "
+      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+garbage-collector.c:238:12: warning: use of assignment suppression and length modifier together in gnu_scanf format [-Wformat=]
+garbage-collector.c:238:12: warning: use of assignment suppression and length modifier together in gnu_scanf format [-Wformat=]
+garbage-collector.c:238:12: warning: use of assignment suppression and length modifier together in gnu_scanf format [-Wformat=]
+garbage-collector.c:238:12: warning: use of assignment suppression and length modifier together in gnu_scanf format [-Wformat=]
+garbage-collector.c:238:12: warning: use of assignment suppression and length modifier together in gnu_scanf format [-Wformat=]
+garbage-collector.c:238:12: warning: use of assignment suppression and length modifier together in gnu_scanf format [-Wformat=]
+garbage-collector.c:238:12: warning: use of assignment suppression and length modifier together in gnu_scanf format [-Wformat=]
+garbage-collector.c:238:12: warning: use of assignment suppression and length modifier together in gnu_scanf format [-Wformat=]
+garbage-collector.c:238:12: warning: use of assignment suppression and length modifier together in gnu_scanf format [-Wformat=]
+garbage-collector.c:238:12: warning: use of assignment suppression and length modifier together in gnu_scanf format [-Wformat=]
+garbage-collector.c:238:12: warning: use of assignment suppression and length modifier together in gnu_scanf format [-Wformat=]
+garbage-collector.c:238:12: warning: use of assignment suppression and length modifier together in gnu_scanf format [-Wformat=]
+garbage-collector.c:238:12: warning: use of assignment suppression and length modifier together in gnu_scanf format [-Wformat=]
+garbage-collector.c:238:12: warning: use of assignment suppression and length modifier together in gnu_scanf format [-Wformat=]
+garbage-collector.c:238:12: warning: use of assignment suppression and length modifier together in gnu_scanf format [-Wformat=]
+garbage-collector.c:238:12: warning: use of assignment suppression and length modifier together in gnu_scanf format [-Wformat=]
+garbage-collector.c:238:12: warning: use of assignment suppression and length modifier together in gnu_scanf format [-Wformat=]
+garbage-collector.c:238:12: warning: format ‘%lu’ expects argument of type ‘long unsigned int *’, but argument 3 has type ‘long long unsigned int *’ [-Wformat=]
+  238 |            "%*d %*s %*c %*d %*d %*d %*d %*d %*u "
+      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+......
+  241 |            "%*lu %*lu %*lu %lu", &stack_bottom);
+      |                                  ~~~~~~~~~~~~~
+      |                                  |
+      |                                  long long unsigned int *
+garbage-collector.c:241:30: note: format string is defined here
+  241 |            "%*lu %*lu %*lu %lu", &stack_bottom);
+      |                            ~~^
+      |                              |
+      |                              long unsigned int *
+      |                            %llu
+garbage-collector.c:243:14: warning: format ‘%p’ expects argument of type ‘void *’, but argument 2 has type ‘long long unsigned int’ [-Wformat=]
+  243 |     printf("%p stack bottom\n", stack_bottom);
+      |             ~^                  ~~~~~~~~~~~~
+      |              |                  |
+      |              void *             long long unsigned int
+      |             %lld
+garbage-collector.c: In function ‘GC_collect’:
+garbage-collector.c:276:27: warning: assignment to ‘header_t *’ {aka ‘struct header *’} from ‘long unsigned int’ makes pointer from integer without a cast [-Wint-conversion]
+  276 |     for (prevp = usedp, p = UNTAG(usedp->next);; prevp = p, p = UNTAG(p->next)) {
+      |                           ^
+garbage-collector.c:276:63: warning: assignment to ‘header_t *’ {aka ‘struct header *’} from ‘long unsigned int’ makes pointer from integer without a cast [-Wint-conversion]
+  276 |     for (prevp = usedp, p = UNTAG(usedp->next);; prevp = p, p = UNTAG(p->next)) {
+      |                                                               ^
+garbage-collector.c:283:57: warning: format ‘%d’ expects argument of type ‘int’, but argument 3 has type ‘long unsigned int’ [-Wformat=]
+  283 |             printf("Freeing chunk of memory at %p size %d\n", tp, tp->size);
+      |                                                        ~^         ~~~~~~~~
+      |                                                         |           |
+      |                                                         int         long unsigned int
+      |                                                        %ld
+garbage-collector.c:284:15: warning: assignment to ‘header_t *’ {aka ‘struct header *’} from ‘long unsigned int’ makes pointer from integer without a cast [-Wint-conversion]
+  284 |             p = UNTAG(p->next);
+      |               ^
+garbage-collector.c:292:25: warning: assignment to ‘struct header *’ from ‘long unsigned int’ makes pointer from integer without a cast [-Wint-conversion]
+  292 |             prevp->next = (unsigned long)p | ((unsigned long) prevp->next & 1);
+      |                         ^
+garbage-collector.c:295:17: warning: assignment to ‘struct header *’ from ‘long unsigned int’ makes pointer from integer without a cast [-Wint-conversion]
+  295 |         p->next = ((unsigned long) p->next) & ~1;
+      |                 ^
+/usr/bin/ld: cannot find 2: No such file or directory
+collect2: error: ld returned 1 exit status

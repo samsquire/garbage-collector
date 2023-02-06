@@ -138,6 +138,55 @@ scan_region(unsigned long *sp, unsigned long *end)
     }
 }
 
+static void
+scan_register(void) {
+    int register_no = 0;
+    unsigned long *vp;
+    header_t *bp, *up;
+    static unsigned long registers[16];
+    printf("Scanning registers\n");
+
+    asm volatile ("movq %%rax,%0" : "=r"(registers[0]));  
+    asm volatile ("movq %%rbx,%0" : "=r"(registers[1]));  
+    asm volatile ("movq %%rbx,%0" : "=r"(registers[2]));  
+    asm volatile ("movq %%rdx,%0" : "=r"(registers[3]));  
+    asm volatile ("movq %%rdi,%0" : "=r"(registers[4]));  
+    asm volatile ("movq %%rsi,%0" : "=r"(registers[5]));
+
+    // loop over assigned memories
+    for (int register_no = 0; register_no < 6; register_no++) {
+        printf("Scanning register %d\n", register_no);
+        printf("%p %p %p\n", bp, UNTAG(usedp->next), usedp);
+        for (bp = UNTAG(usedp->next); bp != usedp; bp = UNTAG(bp->next)) {
+            printf("Loop iteration\n");
+            if (((unsigned long)bp->next & 1)) {
+                printf("Skipping already marked\n");
+               continue;
+            }
+            unsigned long register_data = registers[register_no];
+            printf("%p register data\n", register_data);
+            // loop through memories
+            for (vp = (unsigned long *)(bp + 1);
+                 vp < (bp + bp->size + 1);
+                 vp++) {
+                unsigned long v = *vp;
+                up = UNTAG(bp->next);
+                printf("Checking %p - %p against register value %p\n", up + 1, up + 1 + up->size, register_data);
+                do {
+                    if (up != bp &&
+                        up + 1 <= register_data &&
+                        up + 1 + up->size > register_data) {
+                        printf("Found pointer in register %d\n", register_no);
+                        up->next = ((unsigned long) up->next) | 1;
+                        break;
+                    }
+                } while ((up = UNTAG(up->next)) != bp);
+            }
+        }
+    }
+
+}
+
 /*
  * Scan the marked blocks for references to other unmarked blocks.
  */
@@ -212,16 +261,17 @@ GC_collect(void)
     if (usedp == NULL)
         return;
 
+    scan_register();
+
     /* Scan the BSS and initialized data segments. */
-    printf("%p etext %p end\n", &etext, &end);
-    scan_region(&etext, &end);
+    // scan_region(&etext, &end);
 
     /* Scan the stack. */
     asm volatile ("movq %%rbp, %0" : "=r" (stack_top));
-    scan_region(stack_top, stack_bottom);
+    // scan_region(stack_top, stack_bottom);
 
     /* Mark from the heap. */
-    scan_heap();
+    // scan_heap();
 
     /* And now we collect! */
     for (prevp = usedp, p = UNTAG(usedp->next);; prevp = p, p = UNTAG(p->next)) {
@@ -231,7 +281,7 @@ GC_collect(void)
              * The chunk hasn't been marked. Thus, it must be set free. 
              */
             tp = p;
-            printf("Freeing chunk of memory at %p size %d", tp, tp->size);
+            printf("Freeing chunk of memory at %p size %d\n", tp, tp->size);
             p = UNTAG(p->next);
             add_to_free_list(tp);
 
@@ -249,13 +299,21 @@ GC_collect(void)
     }
 }
 
+dosomething(int *number) {
+    printf("%d\n", *number);
+}
+
 int main() {
     printf("%p\n", &usedp);
     GC_init();
-    int * pointer = GC_malloc(sizeof(int));
+    long * pointer = GC_malloc(sizeof(long));
+    GC_malloc(sizeof(int));
     *pointer = 6;
+    asm ("movq %0, %%rbx" :: "r"(pointer)); 
     printf("%p\n", pointer);
+    // pointer = NULL; 
     printf("First collection\n");
+    dosomething(pointer);
     GC_collect();
     printf("Second collection\n");
     pointer = NULL; 
